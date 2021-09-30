@@ -5,6 +5,7 @@
 	let money = 10000;
 	let currentMovementDifficulty = 1;
 	let currentResource = "Coal";
+	let inventoryValue = 0;
 	let robots = [];
 	$: robots;
 	buyThing("robot", null);
@@ -172,6 +173,16 @@
 			robots[selectedRobot].stats[resource]
 		);
 	}
+	function sellInventory() {
+		money += countInventoryValue();
+	}
+	function countInventoryValue() {
+		let sum = 0;
+		resources.forEach(elem => {
+			sum += robots[selectedRobot].inventory[elem.name] * elem.price
+		});
+		return sum;
+	}
 </script>
 
 <main>
@@ -220,6 +231,7 @@
 				<button on:click={() => buyThing("robot", null)}
 					>Buy Robot {newRobotName}</button
 				>
+				<button on:click={sellInventory}>Sell Inventory for {inventoryValue}</button>
 			</div>
 		</div>
 	</div>
@@ -246,6 +258,19 @@
 			{#each movementDifficulties as difficulty}
 				<div class='option'>
 					<button on:click={() => {changeMovementDifficulty(difficulty.cost)}}>Change Tile to {difficulty.name}</button>
+				</div>
+			{/each}
+		</div>
+	</div>
+	<div class='section'>
+		<p>Inventory</p>
+		<div class='inventory'>
+			<div class='option'>
+				Money: {money}
+			</div>
+			{#each resources as resource}
+				<div class='option'>
+					{resource.name}: {robots[selectedRobot].inventory[resource.name]}
 				</div>
 			{/each}
 		</div>
@@ -301,6 +326,13 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: flex-start;
+		margin: 2rem 0rem 2rem 0rem;
+	}
+	.inventory {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
 		margin: 2rem 0rem 2rem 0rem;
 	}
 	button {
