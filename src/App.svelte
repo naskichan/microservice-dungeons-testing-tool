@@ -285,7 +285,6 @@
 	</div>
 	{money}
 </main>
-#Upgrade, Restock, Robot, Specials
 
 <style>
 	main {
